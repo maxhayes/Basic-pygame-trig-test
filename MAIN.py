@@ -1,20 +1,46 @@
-# pygame test to make player rotate to folow a mouse cursor
+#`````````````````````````````````````````````````````````````````````````````````#
+# _____________________________----- SETUP -----_________________________________ #
 
-
-# import 3rd party libraries:
-import pygame
+# IMPORTS:
+import pygame, math
 from pygame.locals import *
-import math
-
-# import custom libraries:
+from constants import *
 from player_class import *
+from event_handling import *
 
-# init pygame stuff:
-pygame.init()
-clock = pygame.time.Clock()
-pygame.display.set_captopn('Cursor trace trig test')
 
 # create game objects:
-player = Player()
+player = Player(player_image, res_x/2, res_y/2)
 
-# screen stuff:
+# create event/actions & conductor using event_handling
+exes = []
+
+p1_up = Event_exe(K_w, player.moveup, player.movedown, exes)
+p1_down = Event_exe(K_s, player.movedown, player.moveup, exes)
+p1_left = Event_exe(K_a, player.moveleft, player.moveright, exes)
+p1_right = Event_exe(K_d, player.moveright, player.moveleft, exes)
+
+conductor = Event_conductor(exes)
+
+#`````````````````````````````````````````````````````````````````````````````````#
+# _________________________----- Main Loop -----_________________________________ #
+while True:
+    
+    # handle events
+    conductor.handle_events(pygame.event.get())
+    
+    # move/update objects
+    for object in all_sprites_list:
+        object.move()
+        
+    all_sprites_list.update()
+    
+    
+    # draw objects
+    screen.blit(background, (0,0))
+    all_sprites_list.draw(screen)
+    
+    # update screen
+    pygame.display.flip()
+    # limit fps
+    clock.tick(60)

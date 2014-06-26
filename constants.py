@@ -21,7 +21,7 @@ background.fill((0,0,0))
 
 # game experience constants
 
-PLAYER_SPEED = 7
+PLAYER_SPEED = 3.5
 
 # colors
 BLACK = (0,0,0)

@@ -38,8 +38,9 @@ while True:
     
     # draw objects
     screen.blit(background, (0,0))
-    all_sprites_list.draw(screen)
     player.draw_laser()
+    all_sprites_list.draw(screen)
+    
     
     # update screen
     pygame.display.flip()

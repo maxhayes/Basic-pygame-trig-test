@@ -60,6 +60,7 @@ class Player(pygame.sprite.Sprite):
         self.rotate()
         self.rect.x += self.changex
         self.rect.y += self.changey  
+        #self.draw_laser()
         
         
     # heavy methods
@@ -77,7 +78,7 @@ class Player(pygame.sprite.Sprite):
         (Pcoord) = self.rect.center
         Px, Py = Pcoord[0], Pcoord[1]
         
-        # find angle with c(x) = adj/hyp
+        # find angle with cos(x) = adj/hyp
         adj = Px - Mx
         hyp = sqrt( pow(adj,2) + pow(   (Py - My)   ,2))
         raw_angle = degrees(acos(adj/hyp)) # 'raw_angle' does not account for quadrant
@@ -98,6 +99,11 @@ class Player(pygame.sprite.Sprite):
         # correct rotation jitter
         self.rect = self.image.get_rect(center=(self.pos_x, self.pos_y))
         
+    def draw_laser(self):
+        Mx, My = pygame.mouse.get_pos()
+        Px, Py = self.rect.center
+        
+        pygame.draw.aaline(screen, RED, [Px, Py], [Mx, My], True)
 
         
     

@@ -15,21 +15,21 @@ from fractions import Fraction
 from constants import *
 
 
-
 # PLAYER CLASS:
 class Player(pygame.sprite.Sprite):
     
-    def __init__(self, image, start_x = 0, start_y = 0, player_speed = PLAYER_SPEED):
+    def __init__(self, image, start_x = 0, start_y = 0, 
+                 player_speed = PLAYER_SPEED, 
+                 walking_speed = WALKING_SPEED):
         
+        self.frame = 0
         # inherited class init
         pygame.sprite.Sprite.__init__(self)
         
-        # init this class
-       
         # setup image
         self.image = image
         self.orig_image = image
-        self.rect = self.image.get_rect()
+        self.rect = self.image.get_rect()    
         
         # setup pos/speed
         self.rect.x = start_x
@@ -37,8 +37,10 @@ class Player(pygame.sprite.Sprite):
         self.pos_x = start_x
         self.pos_y = start_y
         
+        self.walk_speed = walking_speed
         self.speed = player_speed
         self.changex, self.changey = 0,0
+        
     
         # add object to lists
         all_sprites_list.add(self)
@@ -58,13 +60,33 @@ class Player(pygame.sprite.Sprite):
         self.changex += self.speed
         
     def move(self):
+        self.frame += 1
+        self.choose_frame()
         self.rotate()
         self.rect.x += self.changex
         self.rect.y += self.changey  
-        #self.draw_laser()
         
         
     # heavy methods
+    
+    def choose_frame(self, current_frame = FRAME):
+        
+        self.image = self.orig_image
+        
+        if self.changex == 0 and self.changey == 0:
+            self.start_frame = self.frame
+            
+        else:
+            # player moving, animate
+
+            # select frame
+            step = (self.frame - self.start_frame)//self.walk_speed
+            if step == len(walking_frames):
+                self.start_frame = self.frame
+                step = 0
+            print(step)
+            self.image = walking_frames[step]
+        
     
     def rotate(self):
         
@@ -103,7 +125,7 @@ class Player(pygame.sprite.Sprite):
         self.pos_x, self.pos_y = self.rect.center
         
         # rotate image
-        self.image = pygame.transform.rotate(self.orig_image, self.angle)
+        self.image = pygame.transform.rotate(self.image, self.angle)
         
         # correct rotation jitter by explicetly setting center
         self.rect = self.image.get_rect(center=(self.pos_x, self.pos_y))

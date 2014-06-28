@@ -8,7 +8,6 @@ from constants import *
 from player_class import *
 from event_handling import *
 
-
 # create game objects:
 player = Player(player_image, res_x/2, res_y/2)
 
@@ -22,6 +21,8 @@ p1_right = Event_exe(K_d, player.moveright, player.moveleft, exes)
 
 conductor = Event_conductor(exes)
 
+
+
 #`````````````````````````````````````````````````````````````````````````````````#
 # _________________________----- Main Loop -----_________________________________ #
 while True:
@@ -34,11 +35,7 @@ while True:
         object.move()
         
     all_sprites_list.update()
-    
-    
-    
-    
-    
+            
     # --- drawing ---
     
     # draw background
@@ -48,7 +45,7 @@ while True:
 
     # draw objects
     Mx, My = pygame.mouse.get_pos()
-    screen.blit(crosshair, (Mx- cursor_size[0]/2, My- cursor_size[1]/2))
+    screen.blit(crosshair, (Mx - cursor_size[0]/2, My - cursor_size[1]/2))
     player.draw_laser()    
     all_sprites_list.draw(screen)
     
@@ -56,3 +53,4 @@ while True:
     pygame.display.flip()
     # limit fps
     clock.tick(60)
+    FRAME += 1

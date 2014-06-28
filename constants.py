@@ -15,6 +15,8 @@ pygame.init()
 clock = pygame.time.Clock()
 font = pygame.font.Font(None, 90)
 
+FRAME = 0 # used in main loop to see how many frames have passed
+
 # display init stuff
 display_info = pygame.display.Info()
 res_x, res_y = display_info.current_w, display_info.current_h
@@ -32,7 +34,8 @@ background.fill((50,50,50))
 
 # game experience constants
 
-PLAYER_SPEED = 3.5
+PLAYER_SPEED = 3
+WALKING_SPEED = 12
 
 
 
@@ -51,3 +54,19 @@ crosshair.set_colorkey(WHITE)
 crosshair.set_alpha(150) # makes it see through
 cursor_size = crosshair.get_size()
 
+# sprite sheet walking animation:
+p_walking_ani = pygame.image.load("ani_player_walking_sheet.png").convert()
+p_walking_ani.set_colorkey(WHITE)
+# make a list of frames from the sprite sheet:
+sheet_size = p_walking_ani.get_rect()
+sheet_size = sheet_size.size
+print(sheet_size)
+walking_frames = []
+
+for i in range(6):
+    size = [153, (750/6)] 
+    pos = [0, (size[1] * (i))]
+    walking_frames.append(p_walking_ani.subsurface(pos, size))
+    
+if __name__ == '__main__':
+    print('finished script')

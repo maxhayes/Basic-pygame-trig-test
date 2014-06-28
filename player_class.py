@@ -10,7 +10,8 @@ if __name__ == '__main__':
     ''')
     
 import pygame
-from math import acos, degrees, pow, sqrt
+from math import cos, acos, degrees, pow, sqrt
+from fractions import Fraction
 from constants import *
 
 
@@ -78,6 +79,7 @@ class Player(pygame.sprite.Sprite):
         (Pcoord) = self.rect.center
         Px, Py = Pcoord[0], Pcoord[1]
         
+        
         # find angle with cos(x) = adj/hyp
         adj = Px - Mx
         hyp = sqrt( pow(adj,2) + pow(   (Py - My)   ,2))
@@ -85,26 +87,53 @@ class Player(pygame.sprite.Sprite):
         
         # adjust for cursor being below x-axis of player's orgin
         if Py > My:
-            angle = (180 - raw_angle) + 180
+            self.angle = (180 - raw_angle) + 180
         else:
-            angle = raw_angle
-        print(angle)
+            self.angle = raw_angle
+        #print(angle)
         
         # get center:
         self.pos_x, self.pos_y = self.rect.center
         
         # rotate image
-        self.image = pygame.transform.rotate(self.orig_image, angle)
+        self.image = pygame.transform.rotate(self.orig_image, self.angle)
         
-        # correct rotation jitter
+        # correct rotation jitter by explicetly setting center
         self.rect = self.image.get_rect(center=(self.pos_x, self.pos_y))
         
+    
+    
     def draw_laser(self):
         Mx, My = pygame.mouse.get_pos()
         Px, Py = self.rect.center
-        
-        pygame.draw.aaline(screen, RED, [Px, Py], [Mx, My], True)
 
+        # create the "laser" endpoint further and further until it 'hits' something
+        Lx, Ly, = Mx, My
+        delta_x = Mx - Px
+        delta_y = My - Py
         
+        # corrects for some sort of uncaught 'divide by zero' error
+        if delta_x == 0: 
+            delta_x += .00000000001
     
-    
+        if delta_y == 0: 
+            delta_y += .00000000001
+        
+        while True:
+            # all_sprite_list collision detection will be here to stop laser @ objects
+            
+            
+            # if laser is still ending on screen
+            Lx += delta_x
+            Ly += delta_y
+            
+            if Lx in range(0,res_x):
+                pass
+            elif Ly in range(0, res_y):
+                pass
+            else:
+                break
+            
+
+            
+        pygame.draw.aaline(screen, RED, [Px, Py], [(Lx), (Ly)], True)

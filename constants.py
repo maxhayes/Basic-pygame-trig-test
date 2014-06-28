@@ -1,4 +1,8 @@
 import pygame
+
+
+
+
 # colors
 BLACK = (0,0,0)
 WHITE = (255,255,255)
@@ -41,3 +45,7 @@ player_list = pygame.sprite.Group()
 # images
 player_image = pygame.image.load("Swat_player.png").convert()
 player_image.set_colorkey(WHITE)
+
+crosshair = pygame.image.load("crosshair.png").convert()
+crosshair.set_colorkey(WHITE)
+cursor_size = crosshair.get_size()

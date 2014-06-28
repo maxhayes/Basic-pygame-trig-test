@@ -38,6 +38,8 @@ while True:
     
     # draw objects
     screen.blit(background, (0,0))
+    Mx, My = pygame.mouse.get_pos()
+    screen.blit(crosshair, (Mx- cursor_size[0]/2, My- cursor_size[1]/2))
     player.draw_laser()
     all_sprites_list.draw(screen)
     

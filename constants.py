@@ -48,4 +48,6 @@ player_image.set_colorkey(WHITE)
 
 crosshair = pygame.image.load("crosshair.png").convert()
 crosshair.set_colorkey(WHITE)
+crosshair.set_alpha(150) # makes it see through
 cursor_size = crosshair.get_size()
+

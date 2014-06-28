@@ -83,6 +83,13 @@ class Player(pygame.sprite.Sprite):
         # find angle with cos(x) = adj/hyp
         adj = Px - Mx
         hyp = sqrt( pow(adj,2) + pow(   (Py - My)   ,2))
+        
+        if adj == 0:
+            adj += .00000000001
+            print('fixed divide by zero issue')
+        if hyp == 0:
+            hyp += .00000000001
+            print('fixed divide by zero issue')
         raw_angle = degrees(acos(adj/hyp)) # 'raw_angle' does not account for quadrant
         
         # adjust for cursor being below x-axis of player's orgin
@@ -136,4 +143,4 @@ class Player(pygame.sprite.Sprite):
             
 
             
-        pygame.draw.aaline(screen, RED, [Px, Py], [(Lx), (Ly)], True)
+        pygame.draw.aaline(screen, (RED), [Px, Py], [(Lx), (Ly)], True)

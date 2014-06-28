@@ -36,13 +36,21 @@ while True:
     all_sprites_list.update()
     
     
-    # draw objects
+    
+    
+    
+    # --- drawing ---
+    
+    # draw background
     screen.blit(background, (0,0))
+    box = pygame.Rect(122, 122, 250,250)
+    pygame.draw.rect(screen, BLUE, box, 0) # creates box to play with transparency
+
+    # draw objects
     Mx, My = pygame.mouse.get_pos()
     screen.blit(crosshair, (Mx- cursor_size[0]/2, My- cursor_size[1]/2))
-    player.draw_laser()
+    player.draw_laser()    
     all_sprites_list.draw(screen)
-    
     
     # update screen
     pygame.display.flip()

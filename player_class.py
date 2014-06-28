@@ -64,7 +64,12 @@ class Player(pygame.sprite.Sprite):
         self.choose_frame()
         self.rotate()
         self.rect.x += self.changex
-        self.rect.y += self.changey  
+        self.rect.y += self.changey
+        
+    def draw(self):
+        self.move()
+        screen.blit(self.image, (self.rect.x, self.rect.y))
+        self.draw_laser()
         
         
     # heavy methods
@@ -165,4 +170,4 @@ class Player(pygame.sprite.Sprite):
             
 
             
-        pygame.draw.aaline(screen, (RED), [Px, Py], [(Lx), (Ly)], True)
+        pygame.draw.aaline(screen, (GREEN), [Px, Py], [(Lx), (Ly)], True)

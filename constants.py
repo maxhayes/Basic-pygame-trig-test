@@ -34,8 +34,8 @@ background.fill((50,50,50))
 
 # game experience constants
 
-PLAYER_SPEED = 3
-WALKING_SPEED = 12
+PLAYER_SPEED = 1.5
+WALKING_SPEED = 6
 
 
 

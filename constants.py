@@ -37,6 +37,7 @@ background.fill((50,50,50))
 PLAYER_SPEED_b = 2.5
 PLAYER_SPEED_a = 1.5
 WALKING_SPEED = 6
+RECOIL_SPEED = 2
 
 
 
@@ -61,13 +62,27 @@ p_walking_ani.set_colorkey(WHITE)
 # make a list of frames from the sprite sheet:
 sheet_size = p_walking_ani.get_rect()
 sheet_size = sheet_size.size
-print(sheet_size)
 walking_frames = []
 
 for i in range(8):
     size = [150, (1000/8)] 
     pos = [0, (size[1] * (i))]
     walking_frames.append(p_walking_ani.subsurface(pos, size))
+    
+    
+# sprite sheet recoil animation:
+p_walking_ani = pygame.image.load("ani_body_recoil.png").convert()
+p_walking_ani.set_colorkey(WHITE)
+# make a list of frames from the sprite sheet:
+sheet_size = p_walking_ani.get_rect()
+sheet_size = sheet_size.size
+print(sheet_size)
+recoil_frames = []
+
+for i in range(7):
+    size = [153, (875/7)] 
+    pos = [0, (size[1] * (i))]
+    recoil_frames.append(p_walking_ani.subsurface(pos, size))
     
 if __name__ == '__main__':
     print('finished script')

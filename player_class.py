@@ -20,7 +20,8 @@ class Player(pygame.sprite.Sprite):
     
     def __init__(self, image, start_x = 0, start_y = 0, 
                  player_speed = [PLAYER_SPEED_a, PLAYER_SPEED_b], 
-                 walking_speed = WALKING_SPEED):
+                 walking_speed = WALKING_SPEED,
+                 recoil_speed = RECOIL_SPEED):
         
         self.frame = 0
         # inherited class init
@@ -32,15 +33,19 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()    
         
         # setup pos/speed
+        self.moving = False
         self.rect.x = start_x
         self.rect.y = start_y
         self.pos_x = start_x
         self.pos_y = start_y
         
         self.walk_speed = walking_speed
+        self.recoil_speed = recoil_speed
         self.speeda = player_speed[0]
         self.speedb = player_speed[1]
         self.changex, self.changey = 0,0
+        
+        self.player_fired = False
         
     
         # add object to lists
@@ -69,9 +74,13 @@ class Player(pygame.sprite.Sprite):
     def stopright(self):
         self.changex -= self.speedb
         
+    def fire(self):
+        self.player_fired = True
+        
     def move(self):
         self.frame += 1
         self.choose_feet_frame()
+        self.choose_body_frame()
         self.rotate()
         self.rect.x += self.changex
         self.rect.y += self.changey
@@ -79,29 +88,47 @@ class Player(pygame.sprite.Sprite):
     def draw(self):
         self.move()
         screen.blit(self.image, (self.rect.x, self.rect.y))
-        screen.blit(self.feet_image, (self.rect.x, self.rect.y))
+        if self.moving:
+            screen.blit(self.feet_image, (self.rect.x, self.rect.y))
         self.draw_laser()
         
         
     # heavy methods
     
-    def choose_feet_frame(self, current_frame = FRAME):
+    def choose_feet_frame(self):
         
         self.feet_image = self.orig_image
         
         if self.changex == 0 and self.changey == 0:
-            self.start_frame = self.frame
+            self.walk_start_frame = self.frame
             
         else:
             # player moving, animate
+            self.moving = True
 
             # select frame
-            step = (self.frame - self.start_frame)//self.walk_speed
+            step = (self.frame - self.walk_start_frame)//self.walk_speed
             if step == len(walking_frames):
-                self.start_frame = self.frame
+                self.walk_start_frame = self.frame
                 step = 0
             print(step)
             self.feet_image = walking_frames[step]
+            
+            
+    def choose_body_frame(self, current_Frame = FRAME):
+        if not self.player_fired:
+            self.recoil_start_frame = self.frame
+            self.image = self.orig_image
+        else:
+            # player firing (remember this does not loop)
+            step = (self.frame - self.recoil_start_frame)//self.recoil_speed
+            print(step)
+            if step == len(recoil_frames):
+                self.player_fired = False
+                self.image = self.orig_image
+            else:
+             self.image = recoil_frames[step]
+        
         
     
     def rotate(self):
@@ -141,8 +168,9 @@ class Player(pygame.sprite.Sprite):
         self.pos_x, self.pos_y = self.rect.center
         
         # rotate image
-        self.image = pygame.transform.rotate(self.orig_image, self.angle)
-        self.feet_image = pygame.transform.rotate(self.feet_image, self.angle)
+        self.image = pygame.transform.rotate(self.image, self.angle)
+        if self.moving:
+            self.feet_image = pygame.transform.rotate(self.feet_image, self.angle)
         
         # correct rotation jitter by explicetly setting center
         self.rect = self.image.get_rect(center=(self.pos_x, self.pos_y))

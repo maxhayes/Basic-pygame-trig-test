@@ -18,7 +18,8 @@ p1_up = Event_exe(K_w, player.moveup, player.stopup, exes)
 p1_down = Event_exe(K_s, player.movedown, player.stopdown, exes)
 p1_left = Event_exe(K_a, player.moveleft, player.stopleft, exes)
 p1_right = Event_exe(K_d, player.moveright, player.stopright, exes)
-p1_fire = Event_exe(K_SPACE, player.fire, ignore, exes)
+p1_fire = Event_exe('LMB', player.fire, ignore, exes)
+p1_laseron = Event_exe('RMB', player.laser_on, player.laser_off, exes)
 
 conductor = Event_conductor(exes)
 
@@ -29,7 +30,7 @@ conductor = Event_conductor(exes)
 while True:
     
     # handle events
-    conductor.handle_events(pygame.event.get())
+    conductor.handle_events(pygame.event.get(), pygame.mouse.get_pressed())
     
     # move/update objects
     for object in all_sprites_list:

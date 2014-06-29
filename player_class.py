@@ -46,6 +46,7 @@ class Player(pygame.sprite.Sprite):
         self.changex, self.changey = 0,0
         
         self.player_fired = False
+        self.laser_state = False
         
     
         # add object to lists
@@ -54,45 +55,7 @@ class Player(pygame.sprite.Sprite):
         
     # --- define class methods --- #
     
-    # light methods
-    
-    def moveup(self):
-        self.changey -= self.speeda
-    def movedown(self):
-        self.changey += self.speedb
-    def moveleft(self):
-        self.changex -=self.speeda
-    def moveright(self):
-        self.changex += self.speedb
-        
-    def stopup(self):
-        self.changey += self.speeda
-    def stopdown(self):
-        self.changey -= self.speedb
-    def stopleft(self):
-        self.changex +=self.speeda
-    def stopright(self):
-        self.changex -= self.speedb
-        
-    def fire(self):
-        self.player_fired = True
-        
-    def move(self):
-        self.frame += 1
-        self.choose_feet_frame()
-        self.choose_body_frame()
-        self.rotate()
-        self.rect.x += self.changex
-        self.rect.y += self.changey
-        
-    def draw(self):
-        self.move()
-        screen.blit(self.image, (self.rect.x, self.rect.y))
-        if self.moving:
-            screen.blit(self.feet_image, (self.rect.x, self.rect.y))
-        self.draw_laser()
-        
-        
+
     # heavy methods
     
     def choose_feet_frame(self):
@@ -111,7 +74,6 @@ class Player(pygame.sprite.Sprite):
             if step == len(walking_frames):
                 self.walk_start_frame = self.frame
                 step = 0
-            print(step)
             self.feet_image = walking_frames[step]
             
             
@@ -122,7 +84,6 @@ class Player(pygame.sprite.Sprite):
         else:
             # player firing (remember this does not loop)
             step = (self.frame - self.recoil_start_frame)//self.recoil_speed
-            print(step)
             if step == len(recoil_frames):
                 self.player_fired = False
                 self.image = self.orig_image
@@ -162,7 +123,6 @@ class Player(pygame.sprite.Sprite):
             self.angle = (180 - raw_angle) + 180
         else:
             self.angle = raw_angle
-        #print(angle)
         
         # get center:
         self.pos_x, self.pos_y = self.rect.center
@@ -211,3 +171,56 @@ class Player(pygame.sprite.Sprite):
 
             
         pygame.draw.aaline(screen, (GREEN), [Px, Py], [(Lx), (Ly)], True)
+        
+        
+        
+        
+    # light methods
+    
+    def moveup(self):
+        self.changey -= self.speeda
+    def movedown(self):
+        self.changey += self.speedb
+    def moveleft(self):
+        self.changex -=self.speeda
+    def moveright(self):
+        self.changex += self.speedb
+        
+    def stopup(self):
+        self.changey += self.speeda
+    def stopdown(self):
+        self.changey -= self.speedb
+    def stopleft(self):
+        self.changex +=self.speeda
+    def stopright(self):
+        self.changex -= self.speedb
+        
+    def laser_on(self):
+        print('laser on')
+        self.laser_state = True
+    def laser_off(self):
+        print('laser off')
+        self.laser_state = False
+        
+    def fire(self):
+        self.player_fired = True
+        
+    def move(self):
+        self.frame += 1
+        self.choose_feet_frame()
+        self.choose_body_frame()
+        self.rotate()
+        self.rect.x += self.changex
+        self.rect.y += self.changey
+        
+    def draw(self):
+        
+        self.move()
+        screen.blit(self.image, (self.rect.x, self.rect.y))
+        
+        if self.moving:
+            screen.blit(self.feet_image, (self.rect.x, self.rect.y))
+        if self.laser_state:
+            self.draw_laser()
+        
+    

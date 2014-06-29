@@ -50,7 +50,14 @@ class Event_conductor():
     def __init__(self, actions_list):
         self.actions_list = actions_list
         self.quit = False
-    def handle_events(self, events_list):
+        self.LMB = False
+        self.MMB = False
+        self.RMB= False
+        
+    def handle_events(self, events_list, mouse_state):
+        self.mouse_state = mouse_state
+        
+        
         for event in events_list:
             for action in self.actions_list:
                 
@@ -70,7 +77,38 @@ class Event_conductor():
                         elif event.type == pygame.KEYUP:
                             action.released()
                             
+                # handle mouse events:
                 
+                # left mouse button
+                elif action.event == 'LMB':
+                    if self.mouse_state[0]:
+                        action.pressed()
+                        self.LMB = True
+                    if self.LMB:
+                        if not self.mouse_state[0]:
+                            action.released()
+                            self.LMB = False
+                        
+                # middle mouse button
+                elif action.event == 'MMB':
+                    if self.mouse_state[1]:
+                        action.pressed()
+                        self.MMB = True
+                    if self.MMB:
+                        if not self.mouse_state[1]:
+                            action.released()
+                            self.MMB = False
+            
+                # right mouse button
+                elif action.event == 'RMB':
+                    if self.mouse_state[2]:
+                        action.pressed()
+                        self.RMB = True
+                    if self.RMB:
+                        if not self.mouse_state[2]:
+                            action.released()
+                            self.RMB= True
+        
                             
                                 
                                 

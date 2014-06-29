@@ -6,6 +6,7 @@ import pygame, math
 from pygame.locals import *
 from modules.constants import *
 from modules.player_class import *
+from modules.block_class import *
 from modules.event_handling import *
 
 import pygame.mixer
@@ -14,6 +15,7 @@ pygame.mixer.init()
 
 # create game objects:
 player = Player(player_image, res_x/2, res_y/2)
+block = Block(RED, 122, 122, 250,250)
 
 # create event/actions & conductor using event_handling
 exes = []
@@ -47,14 +49,13 @@ while True:
     
     # draw background
     screen.blit(background, (0,0))
-    box = pygame.Rect(122, 122, 250,250)
-    pygame.draw.rect(screen, BLUE, box, 0) # creates box to play with transparency
-
+   
     # draw objects
+    all_sprites_list.draw(screen)
     Mx, My = pygame.mouse.get_pos()
     screen.blit(crosshair, (Mx - cursor_size[0]/2, My - cursor_size[1]/2))
     player.draw()
-    all_sprites_list.draw(screen)
+    
     
     # update screen
     pygame.display.flip()

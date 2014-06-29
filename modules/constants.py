@@ -37,13 +37,15 @@ background.fill((50,50,50))
 PLAYER_SPEED_b = 2.5
 PLAYER_SPEED_a = 1.5
 WALKING_SPEED = 9
-RECOIL_SPEED = 2
+RECOIL_SPEED = 1
 
 
 
 # lists
 all_sprites_list = pygame.sprite.Group()
+all_sprites_list = pygame.sprite.Group()
 player_list = pygame.sprite.Group()
+block_list = pygame.sprite.Group()
 
 # sizes
 

@@ -50,7 +50,7 @@ class Player(pygame.sprite.Sprite):
         
     
         # add object to lists
-        all_sprites_list.add(self)
+        #all_sprites_list.add(self)
         player_list.add(self)
         
     # --- define class methods --- #
@@ -223,11 +223,13 @@ class Player(pygame.sprite.Sprite):
     def draw(self):
         
         self.move()
-        screen.blit(self.image, (self.rect.x, self.rect.y))
+        
         
         if self.moving:
             screen.blit(self.feet_image, (self.rect.x, self.rect.y))
         if self.laser_state:
             self.draw_laser()
+        
+        screen.blit(self.image, (self.rect.x, self.rect.y))
         
     

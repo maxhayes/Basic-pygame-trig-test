@@ -88,7 +88,7 @@ class Player(pygame.sprite.Sprite):
                 self.player_fired = False
                 self.image = self.orig_image
             else:
-             self.image = recoil_frames[step]
+                self.image = recoil_frames[step]
         
         
     
@@ -203,6 +203,11 @@ class Player(pygame.sprite.Sprite):
         self.laser_state = False
         laser_off.play()
         print('laser off')
+    def laser_toggle(self):
+        if self.laser_state:
+            self.laser_off()
+        else:
+            self.laser_on()
         
         
     def fire(self):

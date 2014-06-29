@@ -14,10 +14,10 @@ player = Player(player_image, res_x/2, res_y/2)
 # create event/actions & conductor using event_handling
 exes = []
 
-p1_up = Event_exe(K_w, player.moveup, player.movedown, exes)
-p1_down = Event_exe(K_s, player.movedown, player.moveup, exes)
-p1_left = Event_exe(K_a, player.moveleft, player.moveright, exes)
-p1_right = Event_exe(K_d, player.moveright, player.moveleft, exes)
+p1_up = Event_exe(K_w, player.moveup, player.stopup, exes)
+p1_down = Event_exe(K_s, player.movedown, player.stopdown, exes)
+p1_left = Event_exe(K_a, player.moveleft, player.stopleft, exes)
+p1_right = Event_exe(K_d, player.moveright, player.stopright, exes)
 
 conductor = Event_conductor(exes)
 

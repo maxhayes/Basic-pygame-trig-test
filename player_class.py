@@ -19,7 +19,7 @@ from constants import *
 class Player(pygame.sprite.Sprite):
     
     def __init__(self, image, start_x = 0, start_y = 0, 
-                 player_speed = PLAYER_SPEED, 
+                 player_speed = [PLAYER_SPEED_a, PLAYER_SPEED_b], 
                  walking_speed = WALKING_SPEED):
         
         self.frame = 0
@@ -38,7 +38,8 @@ class Player(pygame.sprite.Sprite):
         self.pos_y = start_y
         
         self.walk_speed = walking_speed
-        self.speed = player_speed
+        self.speeda = player_speed[0]
+        self.speedb = player_speed[1]
         self.changex, self.changey = 0,0
         
     
@@ -51,17 +52,26 @@ class Player(pygame.sprite.Sprite):
     # light methods
     
     def moveup(self):
-        self.changey -= self.speed
+        self.changey -= self.speeda
     def movedown(self):
-        self.changey += self.speed
+        self.changey += self.speedb
     def moveleft(self):
-        self.changex -=self.speed    
+        self.changex -=self.speeda
     def moveright(self):
-        self.changex += self.speed
+        self.changex += self.speedb
+        
+    def stopup(self):
+        self.changey += self.speeda
+    def stopdown(self):
+        self.changey -= self.speedb
+    def stopleft(self):
+        self.changex +=self.speeda
+    def stopright(self):
+        self.changex -= self.speedb
         
     def move(self):
         self.frame += 1
-        self.choose_frame()
+        self.choose_feet_frame()
         self.rotate()
         self.rect.x += self.changex
         self.rect.y += self.changey
@@ -75,7 +85,7 @@ class Player(pygame.sprite.Sprite):
         
     # heavy methods
     
-    def choose_frame(self, current_frame = FRAME):
+    def choose_feet_frame(self, current_frame = FRAME):
         
         self.feet_image = self.orig_image
         

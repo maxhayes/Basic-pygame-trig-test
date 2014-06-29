@@ -36,7 +36,7 @@ background.fill((50,50,50))
 
 PLAYER_SPEED_b = 2.5
 PLAYER_SPEED_a = 1.5
-WALKING_SPEED = 6
+WALKING_SPEED = 9
 RECOIL_SPEED = 2
 
 

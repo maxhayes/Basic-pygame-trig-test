@@ -48,16 +48,16 @@ player_list = pygame.sprite.Group()
 # sizes
 
 # :::::::::: IMAGES :::::::::::::::::::
-player_image = pygame.image.load("Swat_player.png").convert()
+player_image = pygame.image.load("images/Swat_player.png").convert()
 player_image.set_colorkey(WHITE)
 
-crosshair = pygame.image.load("crosshair.png").convert()
+crosshair = pygame.image.load("images/crosshair.png").convert()
 crosshair.set_colorkey(WHITE)
 crosshair.set_alpha(150) # makes it see through
 cursor_size = crosshair.get_size()
 
 # sprite sheet walking animation:
-p_walking_ani = pygame.image.load("ani_feet_walking_sheet.png").convert()
+p_walking_ani = pygame.image.load("images/ani_feet_walking_sheet.png").convert()
 p_walking_ani.set_colorkey(WHITE)
 # make a list of frames from the sprite sheet:
 sheet_size = p_walking_ani.get_rect()
@@ -71,7 +71,7 @@ for i in range(8):
     
     
 # sprite sheet recoil animation:
-p_walking_ani = pygame.image.load("ani_body_recoil.png").convert()
+p_walking_ani = pygame.image.load("images/ani_body_recoil.png").convert()
 p_walking_ani.set_colorkey(WHITE)
 # make a list of frames from the sprite sheet:
 sheet_size = p_walking_ani.get_rect()
@@ -87,9 +87,9 @@ for i in range(7):
 
     
 # :::::::::::::::::: SOUNDS ::::::::::::::::::::::::::
-gunshot_silenced = pygame.mixer.Sound('silenced_gunshot.wav')
-laser_on = pygame.mixer.Sound('laser_toggle_on.wav')
-laser_off = pygame.mixer.Sound('laser_toggle_off.wav')
+gunshot_silenced = pygame.mixer.Sound('sound_fx/silenced_gunshot.wav')
+laser_on = pygame.mixer.Sound('sound_fx/laser_toggle_on.wav')
+laser_off = pygame.mixer.Sound('sound_fx/laser_toggle_off.wav')
 
 
 

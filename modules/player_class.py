@@ -12,7 +12,7 @@ if __name__ == '__main__':
 import pygame
 from math import cos, acos, degrees, pow, sqrt
 from fractions import Fraction
-from constants import *
+from modules.constants import *
 
 
 # PLAYER CLASS:
@@ -197,12 +197,10 @@ class Player(pygame.sprite.Sprite):
         
     def laser_on(self):
         self.laser_state = True
-        print('laser on')
         laser_on.play()
     def laser_off(self):
         self.laser_state = False
         laser_off.play()
-        print('laser off')
     def laser_toggle(self):
         if self.laser_state:
             self.laser_off()

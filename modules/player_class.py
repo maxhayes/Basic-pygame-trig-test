@@ -219,6 +219,13 @@ class Player(pygame.sprite.Sprite):
         self.rotate()
         self.rect.x += self.changex
         self.rect.y += self.changey
+        # check for collision:
+        player_hit_block = pygame.sprite.spritecollide(self, block_list, False)
+        for block in player_hit_block:
+            if self.changex > 0 : self.rect.right = block.rect.left
+            elif self.changex < 0: self.rect.left = block.rect.right
+            elif self.changey > 0: self.rect.bottom = block.rect.top
+            elif self.changey < 0: self.rect.top = block.rect.bottom
         
     def draw(self):
         

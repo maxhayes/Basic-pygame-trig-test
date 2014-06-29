@@ -8,6 +8,10 @@ from constants import *
 from player_class import *
 from event_handling import *
 
+import pygame.mixer
+pygame.mixer.pre_init(48000, -16, 1, 512)
+pygame.mixer.init()
+
 # create game objects:
 player = Player(player_image, res_x/2, res_y/2)
 

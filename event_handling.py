@@ -81,7 +81,7 @@ class Event_conductor():
                 
                 # left mouse button
                 elif action.event == 'LMB':
-                    if self.mouse_state[0]:
+                    if self.mouse_state[0] and self.LMB == False:
                         action.pressed()
                         self.LMB = True
                     if self.LMB:
@@ -91,7 +91,7 @@ class Event_conductor():
                         
                 # middle mouse button
                 elif action.event == 'MMB':
-                    if self.mouse_state[1]:
+                    if self.mouse_state[1] and self.MMB == False:
                         action.pressed()
                         self.MMB = True
                     if self.MMB:
@@ -101,13 +101,13 @@ class Event_conductor():
             
                 # right mouse button
                 elif action.event == 'RMB':
-                    if self.mouse_state[2]:
+                    if self.mouse_state[2] and self.RMB == False:
                         action.pressed()
                         self.RMB = True
                     if self.RMB:
                         if not self.mouse_state[2]:
                             action.released()
-                            self.RMB= True
+                            self.RMB= False
         
                             
                                 

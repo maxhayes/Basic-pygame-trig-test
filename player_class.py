@@ -197,10 +197,16 @@ class Player(pygame.sprite.Sprite):
         
     def laser_on(self):
         self.laser_state = True
+        print('laser on')
+        laser_on.play()
     def laser_off(self):
         self.laser_state = False
+        laser_off.play()
+        print('laser off')
+        
         
     def fire(self):
+        gunshot_silenced.play()
         self.player_fired = True
         
     def move(self):

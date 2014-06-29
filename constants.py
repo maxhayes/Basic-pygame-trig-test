@@ -47,7 +47,7 @@ player_list = pygame.sprite.Group()
 
 # sizes
 
-# images
+# :::::::::: IMAGES :::::::::::::::::::
 player_image = pygame.image.load("Swat_player.png").convert()
 player_image.set_colorkey(WHITE)
 
@@ -84,5 +84,22 @@ for i in range(7):
     pos = [0, (size[1] * (i))]
     recoil_frames.append(p_walking_ani.subsurface(pos, size))
     
+
+    
+# :::::::::::::::::: SOUNDS ::::::::::::::::::::::::::
+gunshot_silenced = pygame.mixer.Sound('silenced_gunshot.wav')
+laser_on = pygame.mixer.Sound('laser_toggle_on.wav')
+laser_off = pygame.mixer.Sound('laser_toggle_off.wav')
+
+
+
+
+
+
+
+
+
 if __name__ == '__main__':
     print('finished script')
+    
+    

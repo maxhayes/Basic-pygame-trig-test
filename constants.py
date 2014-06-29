@@ -35,7 +35,7 @@ background.fill((50,50,50))
 # game experience constants
 
 PLAYER_SPEED = 3
-WALKING_SPEED = 4
+WALKING_SPEED = 12
 
 
 
@@ -55,7 +55,7 @@ crosshair.set_alpha(150) # makes it see through
 cursor_size = crosshair.get_size()
 
 # sprite sheet walking animation:
-p_walking_ani = pygame.image.load("ani_player_walking_sheet.png").convert()
+p_walking_ani = pygame.image.load("ani_feet_walking_sheet.png").convert()
 p_walking_ani.set_colorkey(WHITE)
 # make a list of frames from the sprite sheet:
 sheet_size = p_walking_ani.get_rect()
@@ -63,8 +63,8 @@ sheet_size = sheet_size.size
 print(sheet_size)
 walking_frames = []
 
-for i in range(6):
-    size = [153, (750/6)] 
+for i in range(8):
+    size = [150, (1000/8)] 
     pos = [0, (size[1] * (i))]
     walking_frames.append(p_walking_ani.subsurface(pos, size))
     

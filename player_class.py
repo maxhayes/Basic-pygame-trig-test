@@ -69,6 +69,7 @@ class Player(pygame.sprite.Sprite):
     def draw(self):
         self.move()
         screen.blit(self.image, (self.rect.x, self.rect.y))
+        screen.blit(self.feet_image, (self.rect.x, self.rect.y))
         self.draw_laser()
         
         
@@ -76,7 +77,7 @@ class Player(pygame.sprite.Sprite):
     
     def choose_frame(self, current_frame = FRAME):
         
-        self.image = self.orig_image
+        self.feet_image = self.orig_image
         
         if self.changex == 0 and self.changey == 0:
             self.start_frame = self.frame
@@ -90,7 +91,7 @@ class Player(pygame.sprite.Sprite):
                 self.start_frame = self.frame
                 step = 0
             print(step)
-            self.image = walking_frames[step]
+            self.feet_image = walking_frames[step]
         
     
     def rotate(self):
@@ -130,7 +131,8 @@ class Player(pygame.sprite.Sprite):
         self.pos_x, self.pos_y = self.rect.center
         
         # rotate image
-        self.image = pygame.transform.rotate(self.image, self.angle)
+        self.image = pygame.transform.rotate(self.orig_image, self.angle)
+        self.feet_image = pygame.transform.rotate(self.feet_image, self.angle)
         
         # correct rotation jitter by explicetly setting center
         self.rect = self.image.get_rect(center=(self.pos_x, self.pos_y))

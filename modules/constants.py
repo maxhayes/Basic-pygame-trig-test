@@ -34,8 +34,8 @@ background.fill((50,50,50))
 
 # game experience constants
 
-PLAYER_SPEED_b = 2.5
-PLAYER_SPEED_a = 1.5
+PLAYER_SPEED_b = 3.5
+PLAYER_SPEED_a = PLAYER_SPEED_b - 1
 WALKING_SPEED = 9
 RECOIL_SPEED = 1
 
@@ -50,10 +50,10 @@ block_list = pygame.sprite.Group()
 # sizes
 
 # :::::::::: IMAGES :::::::::::::::::::
-player_image = pygame.image.load("images/Swat_player.png").convert()
+player_image = pygame.image.load("images\Swat_player.png").convert()
 player_image.set_colorkey(WHITE)
 
-crosshair = pygame.image.load("images/crosshair.png").convert()
+crosshair = pygame.image.load("images\crosshair.png").convert()
 crosshair.set_colorkey(WHITE)
 crosshair.set_alpha(150) # makes it see through
 cursor_size = crosshair.get_size()
@@ -89,9 +89,9 @@ for i in range(7):
 
     
 # :::::::::::::::::: SOUNDS ::::::::::::::::::::::::::
-gunshot_silenced = pygame.mixer.Sound('sound_fx/silenced_gunshot.wav')
-laser_on = pygame.mixer.Sound('sound_fx/laser_toggle_on.wav')
-laser_off = pygame.mixer.Sound('sound_fx/laser_toggle_off.wav')
+gunshot_silenced = pygame.mixer.Sound('sound_fx\silenced_gunshot.wav')
+laser_on = pygame.mixer.Sound('sound_fx\laser_toggle_on.wav')
+laser_off = pygame.mixer.Sound('sound_fx\laser_toggle_off.wav')
 
 
 

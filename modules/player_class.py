@@ -71,7 +71,7 @@ class Player(pygame.sprite.Sprite):
 
             # select frame
             step = (self.frame - self.walk_start_frame)//self.walk_speed
-            if step == len(walking_frames):
+            if step >= len(walking_frames):
                 self.walk_start_frame = self.frame
                 step = 0
             self.feet_image = walking_frames[step]
@@ -84,7 +84,7 @@ class Player(pygame.sprite.Sprite):
         else:
             # player firing (remember this does not loop)
             step = (self.frame - self.recoil_start_frame)//self.recoil_speed
-            if step == len(recoil_frames):
+            if step >= len(recoil_frames):
                 self.player_fired = False
                 self.image = self.orig_image
             else:
@@ -179,12 +179,21 @@ class Player(pygame.sprite.Sprite):
     
     def moveup(self):
         self.changey -= self.speeda
+
+            
+            
     def movedown(self):
         self.changey += self.speedb
+
+        
     def moveleft(self):
-        self.changex -=self.speeda
+        self.changex -= self.speeda
+
+        
     def moveright(self):
         self.changex += self.speedb
+
+        
         
     def stopup(self):
         self.changey += self.speeda
@@ -219,13 +228,7 @@ class Player(pygame.sprite.Sprite):
         self.rotate()
         self.rect.x += self.changex
         self.rect.y += self.changey
-        # check for collision:
-        player_hit_block = pygame.sprite.spritecollide(self, block_list, False)
-        for block in player_hit_block:
-            if self.changex > 0 : self.rect.right = block.rect.left
-            elif self.changex < 0: self.rect.left = block.rect.right
-            elif self.changey > 0: self.rect.bottom = block.rect.top
-            elif self.changey < 0: self.rect.top = block.rect.bottom
+
         
     def draw(self):
         

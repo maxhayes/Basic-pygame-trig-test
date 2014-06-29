@@ -196,10 +196,8 @@ class Player(pygame.sprite.Sprite):
         self.changex -= self.speedb
         
     def laser_on(self):
-        print('laser on')
         self.laser_state = True
     def laser_off(self):
-        print('laser off')
         self.laser_state = False
         
     def fire(self):

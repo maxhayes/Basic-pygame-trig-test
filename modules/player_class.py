@@ -30,8 +30,10 @@ class Player(pygame.sprite.Sprite):
         # setup image
         self.image = image
         self.orig_image = image
-        self.rect = self.image.get_rect()    
-        self.radius = 50
+        self.rect = self.image.get_rect()
+        # change hitbox size: !!!!!!!!!!!!!!!!
+        self.hit_box = pygame.Rect((self.rect.x + 60, self.rect.y + 30),
+                                    (self.rect.x + self.rect.width, self.rect.y + self.rect.height))
         
         # setup pos/speed
         self.rect.x = start_x
@@ -141,9 +143,6 @@ class Player(pygame.sprite.Sprite):
         # correct rotation jitter by explicetly setting center
         self.rect = self.image.get_rect(center=(self.pos_x, self.pos_y))
         
-        # see if rotation collided with anything:
-        player_hit_block = pygame.sprite.spritecollide(self, block_list, False)
-    
         
     
     
@@ -230,16 +229,7 @@ class Player(pygame.sprite.Sprite):
         gunshot_silenced.play()
         self.player_fired = True
         
-    def move(self):      
-        
-        
-        self.frame += 1
-        self.choose_feet_frame()
-        self.choose_body_frame()
-        self.rotate()
-        
-                
-        
+    def move_collide_rect(self):
         # move up/down and collide check:
         self.rect.x += self.changex
         self.rect.y += self.changey
@@ -260,11 +250,19 @@ class Player(pygame.sprite.Sprite):
             if   deltas.index(min(deltas)) == 0: self.rect.x += min(deltas)
             elif deltas.index(min(deltas)) == 1: self.rect.x -= min(deltas)
             elif deltas.index(min(deltas)) == 2: self.rect.y += min(deltas)
-            elif deltas.index(min(deltas)) == 3: self.rect.y -= min(deltas)
-
+            elif deltas.index(min(deltas)) == 3: self.rect.y -= min(deltas)     
             
-
+            
         
+    def move(self):      
+        
+        
+        self.frame += 1
+        self.choose_feet_frame()
+        self.choose_body_frame()
+        #self.rotate()
+        self.move_collide_rect()
+
         
     def update(self):
         
@@ -275,14 +273,9 @@ class Player(pygame.sprite.Sprite):
             self.draw_laser()
             
         # make hitbox visible for collision debug.
-        self.hit_box = pygame.Surface([self.rect.width, self.rect.height])
-        self.hit_box.fill([0,125,125,5])
-        screen.blit(self.hit_box, (self.rect.x, self.rect.y))
+        self.hit_box_vis = pygame.Surface([self.hit_box.width, self.hit_box.height])
+        self.hit_box_vis.fill([0,125,125,5])
+        screen.blit(self.hit_box_vis, (self.rect.x, self.rect.y))
     
         # draw player body
         screen.blit(self.image, (self.rect.x, self.rect.y))
-        
-
-    
-        
-    

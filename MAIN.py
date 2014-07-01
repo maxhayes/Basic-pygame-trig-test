@@ -54,7 +54,7 @@ while True:
     all_sprites_list.draw(screen)
     Mx, My = pygame.mouse.get_pos()
     screen.blit(crosshair, (Mx - cursor_size[0]/2, My - cursor_size[1]/2))
-    player.draw()
+    player.update()
     
     
     # update screen

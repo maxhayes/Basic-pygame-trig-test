@@ -260,7 +260,7 @@ class Player(pygame.sprite.Sprite):
         self.frame += 1
         self.choose_feet_frame()
         self.choose_body_frame()
-        #self.rotate()
+        self.rotate()
         self.move_collide_rect()
 
         

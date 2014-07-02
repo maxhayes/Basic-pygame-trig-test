@@ -34,8 +34,7 @@ background.fill((50,50,50))
 
 # game experience constants
 
-PLAYER_SPEED_b = 3.5
-PLAYER_SPEED_a = PLAYER_SPEED_b - 1
+PLAYER_SPEED = 4
 WALKING_SPEED = 9
 RECOIL_SPEED = 1
 
@@ -52,6 +51,7 @@ block_list = pygame.sprite.Group()
 # :::::::::: IMAGES :::::::::::::::::::
 player_image = pygame.image.load("images\Swat_player.png").convert()
 player_image.set_colorkey(WHITE)
+#player_image.set_alpha(100)
 
 crosshair = pygame.image.load("images\crosshair.png").convert()
 crosshair.set_colorkey(WHITE)

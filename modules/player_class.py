@@ -19,7 +19,6 @@ from modules.constants import *
 class Player(pygame.sprite.Sprite):
     
     def __init__(self, image, start_x = 0, start_y = 0, 
-                 player_speed = [PLAYER_SPEED_a, PLAYER_SPEED_b], 
                  walking_speed = WALKING_SPEED,
                  recoil_speed = RECOIL_SPEED):
         
@@ -31,27 +30,21 @@ class Player(pygame.sprite.Sprite):
         self.image = image
         self.orig_image = image
         self.rect = self.image.get_rect()
-        # change hitbox size: !!!!!!!!!!!!!!!!
-        self.hit_box = pygame.Rect((self.rect.x + 60, self.rect.y + 30),
-                                    (self.rect.x + self.rect.width, self.rect.y + self.rect.height))
         
-        # setup pos/speed
+        self.hit_width = 120
+        self.hit_height = 110
+        self.hit_box = pygame.rect.Rect(0,0, self.hit_width, self.hit_height)
+        self.hit_box.center = [start_x, start_y]
+
+        # setup pos/speeds
         self.rect.x = start_x
-        self.rect.y = start_y
-        self.pos_x = start_x
-        self.pos_y = start_y
-        
+        self.rect.y = start_y   
         self.walk_speed = walking_speed
         self.recoil_speed = recoil_speed
-        self.speeda = player_speed[0]
-        self.speedb = player_speed[1]
+        self.speed = PLAYER_SPEED
         self.changex, self.changey = 0,0
         
         self.moving = False
-        self.moving_left = False
-        self.moving_right = False
-        self.moving_up = False
-        self.moving_down = False
         self.player_fired = False
         self.laser_state = False
         
@@ -60,11 +53,7 @@ class Player(pygame.sprite.Sprite):
         #all_sprites_list.add(self)
         player_list.add(self)
         
-    # --- define class methods --- #
-    
-
-    # heavy methods
-    
+    # --- define class methods --- #    
     def choose_feet_frame(self):
         
         self.feet_image = walking_frames[0]
@@ -100,10 +89,6 @@ class Player(pygame.sprite.Sprite):
         
     
     def rotate(self):
-        
-        # -- calculate angle between player/mouse line and x = 0 --
-        # -- using Cos(A) = adj/hyp
-        
         # get mouse coord
         (Mcoord) = pygame.mouse.get_pos()
         Mx, My = Mcoord[0], Mcoord[1]
@@ -130,10 +115,8 @@ class Player(pygame.sprite.Sprite):
             self.angle = (180 - raw_angle) + 180
         else:
             self.angle = raw_angle
-        
         # get center:
         self.pos_x, self.pos_y = self.rect.center
-        
         
         # rotate image
         self.image = pygame.transform.rotate(self.image, self.angle)
@@ -142,6 +125,20 @@ class Player(pygame.sprite.Sprite):
         
         # correct rotation jitter by explicetly setting center
         self.rect = self.image.get_rect(center=(self.pos_x, self.pos_y))
+        self.hit_box.center = self.rect.center
+        
+        # rotate hit box if thresholds are passed
+        print(self.angle)
+        bounds = [26,136,205,325]
+        if round(self.angle) in range (bounds[0],bounds[1]) or round(self.angle) in range(bounds[2],bounds[3]):
+            self.hit_box.height = self.hit_width
+            self.hit_box.width = self.hit_height
+        else:
+            self.hit_box.height = self.hit_height
+            self.hit_box.width = self.hit_width           
+            
+            
+        
         
         
     
@@ -152,65 +149,70 @@ class Player(pygame.sprite.Sprite):
 
         # create the "laser" endpoint further and further until it 'hits' something
         Lx, Ly, = Mx, My
-        delta_x = Mx - Px
-        delta_y = My - Py
+        slope_x = (Mx - Px)
+        slope_y = (My - Py)
         
-        # corrects for some sort of uncaught 'divide by zero' error
-        if delta_x == 0: 
-            delta_x += .00000000001
-    
-        if delta_y == 0: 
-            delta_y += .00000000001
+        if slope_x == 0: slope_x += .00000000001
+        if slope_y == 0: slope_y += .00000000001 
         
-        while True:
-            # all_sprite_list collision detection will be here to stop laser @ objects
-            
-            
-            # if laser is still ending on screen
-            Lx += delta_x
-            Ly += delta_y
-            
+        sign_x = slope_x/abs(slope_x)
+        sign_y = slope_y/abs(slope_y)
+
+        
+        delta_x = (slope_x/slope_y)*sign_y
+        delta_y = (slope_y/slope_x)*sign_x      
+        
+        if abs(delta_x) > abs(delta_y):
+            delta_y = sign_y    
+        else:
+            delta_x = sign_x
+
+        collide = False
+        while not collide:
+            #extend laser
+            last_lx = Lx
+            last_ly = Ly
+            Lx += delta_x*50
+            Ly += delta_y*50
+                
+                    
+                
+                
+                
+                
+
+            # see if laser has moved off screen
             if Lx in range(0,res_x):
                 pass
             elif Ly in range(0, res_y):
                 pass
             else:
-                break
-            
-
-            
+                collide = True
+                
         pygame.draw.aaline(screen, (GREEN), [Px, Py], [(Lx), (Ly)], True)
-        
-        
-        
-        
-    # light methods
+ 
+    # movement/keybinding methods:
+    def fire(self):
+        gunshot_silenced.play()
+        self.player_fired = True    
     
     def moveup(self):
-        self.changey -= self.speeda 
-        self.moving_up = True
+        self.changey -= self.speed
     def movedown(self):
-        self.changey += self.speedb  
-        self.moving_down = True
+        self.changey += self.speed
     def moveleft(self):
-        self.changex -= self.speeda
-        self.moving_left = True
+        self.changex -= self.speed
     def moveright(self):
-        self.changex += self.speedb
-        self.moving_right = True
+        self.changex += self.speed
         
     def stopup(self):
-        self.changey += self.speeda
-        self.moving_up = False
+        self.changey += self.speed
     def stopdown(self):
-        self.changey -= self.speedb
-        self.moving_down = False
+        self.changey -= self.speed
     def stopleft(self):
-        self.changex +=self.speeda
-        self.mobing_left = False
+        self.changex +=self.speed
     def stopright(self):
-        self.changex -= self.speedb
-        self.moving_right = False
+        self.changex -= self.speed
         
     def laser_on(self):
         self.laser_state = True
@@ -225,32 +227,31 @@ class Player(pygame.sprite.Sprite):
             self.laser_on()
         
         
-    def fire(self):
-        gunshot_silenced.play()
-        self.player_fired = True
+
         
     def move_collide_rect(self):
         # move up/down and collide check:
         self.rect.x += self.changex
         self.rect.y += self.changey
         
-        player_hit_block = pygame.sprite.spritecollide(self, block_list, False)
-        for block in player_hit_block:
-            # make the smallest change possible to get player out of the wall
-            delta_left = block.rect.right - self.rect.left
-            delta_right = self.rect.right - block.rect.left
-            delta_top = block.rect.bottom - self.rect.top
-            delta_bottom = self.rect.bottom - block.rect.top
-            
-            # add all deltas to a list:
-            deltas = [delta_left, delta_right, delta_top, delta_bottom]
-            print(deltas)
-            print('%s: %s\n\n' % (deltas.index(min(deltas)), min(deltas)))
-            
-            if   deltas.index(min(deltas)) == 0: self.rect.x += min(deltas)
-            elif deltas.index(min(deltas)) == 1: self.rect.x -= min(deltas)
-            elif deltas.index(min(deltas)) == 2: self.rect.y += min(deltas)
-            elif deltas.index(min(deltas)) == 3: self.rect.y -= min(deltas)     
+        
+        for block in block_list:
+            if self.hit_box.colliderect(block.rect):
+                # make the smallest change possible to get player out of the wall
+                delta_left = block.rect.right - self.hit_box.left
+                delta_right = self.hit_box.right - block.rect.left
+                delta_top = block.rect.bottom - self.hit_box.top
+                delta_bottom = self.hit_box.bottom - block.rect.top
+                
+                # add all deltas to a list:
+                deltas = [delta_left, delta_right, delta_top, delta_bottom]
+                
+                if   deltas.index(min(deltas)) == 0: self.rect.x += min(deltas)
+                elif deltas.index(min(deltas)) == 1: self.rect.x -= min(deltas)
+                elif deltas.index(min(deltas)) == 2: self.rect.y += min(deltas)
+                elif deltas.index(min(deltas)) == 3: self.rect.y -= min(deltas)
+                # reset hitbox:
+                self.hit_box.center = self.rect.center
             
             
         
@@ -266,16 +267,16 @@ class Player(pygame.sprite.Sprite):
         
     def update(self):
         
+        # make hitbox visible for collision debug.
+        self.hit_box_vis = pygame.Surface([self.hit_box.width, self.hit_box.height])
+        self.hit_box_vis.fill([0,125,125,5])
+       # screen.blit(self.hit_box_vis, (self.hit_box.topleft))        
+        
         self.move()
         if self.moving:
             screen.blit(self.feet_image, (self.rect.x, self.rect.y))
         if self.laser_state:
             self.draw_laser()
-            
-        # make hitbox visible for collision debug.
-        self.hit_box_vis = pygame.Surface([self.hit_box.width, self.hit_box.height])
-        self.hit_box_vis.fill([0,125,125,5])
-        screen.blit(self.hit_box_vis, (self.rect.x, self.rect.y))
     
         # draw player body
         screen.blit(self.image, (self.rect.x, self.rect.y))

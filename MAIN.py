@@ -7,7 +7,7 @@ from pygame.locals import *
 from modules.constants import *
 from modules.player_class import *
 from modules.block_class import *
-from modules.event_handling import *
+from modules.mxrydevtools import *
 
 import pygame.mixer
 pygame.mixer.pre_init(48000, -16, 1, 512)

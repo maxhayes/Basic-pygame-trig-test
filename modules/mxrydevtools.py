@@ -1,11 +1,19 @@
 # Defines the custom library to aide with event handling in pygame.
 
 import pygame, sys
+from math import acos, degrees, pow, sqrt
 
 if __name__ == '__main__':
     print('''
-    This file is used to define a library that aides with 
-    event handling in pygame.  It includes two classes.
+    This file is used to define a set of MxRyDev devloped
+    custom tools for use with pygame.
+    
+    It includes (or will soon include):
+    - Event handling (Event_exe and Conductor classes)
+    - finding game rotation
+    
+    
+    
     
     This ".
     on its own, it provides no functionality.
@@ -15,6 +23,44 @@ if __name__ == '__main__':
 
 
 
+#:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::#
+#:::::::::::::: FIND INGAME ROTATION :::::::::::::::::::::::#
+'''
+FUNCTION:
+Finds the rotation between two points.
+The first point is the 'orgin' ie: the center of your player
+360 degrees is on the left, decreasing as you move clockwise.
+ 
+'''
+
+def find_rotation(data1, data2, data3 = '', data4 = ''):
+    if data3 == '' and type(data1) == tuple:
+        x1,y1 = data1
+        x2,y2 = data2
+        # assuming function was passed two tuples as points
+    else: x1,y1,x2,y2 = data1, data2, data3, data4
+    
+    
+    adj = x1 - x2
+    hyp = sqrt( pow(adj,2) + pow(   (y1 - y2)   ,2))
+    
+    if adj == 0:
+        adj += .00000000001
+        print('fixed divide by zero issue')
+    if hyp == 0:
+        hyp += .00000000001
+        print('fixed divide by zero issue')
+    raw_angle = degrees(acos(adj/hyp)) # 'raw_angle' does not account for quadrant
+    
+    # adjust for cursor being below x-axis of player's orgin
+    if y1 > y2:
+        angle = (180 - raw_angle) + 180
+    else:
+        angle = raw_angle    
+    return(angle)
+
+#::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::#
+#::::::::::::: EVENT HANDLING (2 classes) :::::::::::::::::::#
 def ignore():
     pass
 
@@ -25,8 +71,6 @@ Each object needs to be passed a pygame event and
 two fucntions or "actions" upon creation.
 The first will occur when the pygame event is a KEYDOWN
 and the second will respond to KEYUP.
-
-... at least that's the dream.
 
 '''
 
@@ -120,3 +164,6 @@ Pygame.QUIT work.
 -find ways to reduce end-user typing.
     (such as not having to specifiy "actions_list" for each object)
 '''
+
+#::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+#::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

@@ -13,7 +13,7 @@ import pygame
 from math import cos, acos, degrees, pow, sqrt
 from fractions import Fraction
 from modules.constants import *
-from modules.mxrydevtools import find_rotation
+from mxrydevtools import find_rotation
 
 
 # PLAYER CLASS:
@@ -74,7 +74,7 @@ class Player(pygame.sprite.Sprite):
         # uncomment next line to draw hitbox:
         #screen.blit(self.hit_box_vis, (self.hit_box.topleft))        
         self.move()
-        if self.moving:
+        if self.feet_image:
             screen.blit(self.feet_image, (self.rect.x, self.rect.y))
         if self.laser_state:
             self.draw_laser()
@@ -86,7 +86,7 @@ class Player(pygame.sprite.Sprite):
 
     # selects correct frame from feet walking animation
     def choose_feet_frame(self):
-        self.feet_image = walking_frames[0]
+        self.feet_image = None
         if self.changex == 0 and self.changey == 0:
             self.walk_start_frame = self.frame
         else:
@@ -127,9 +127,8 @@ class Player(pygame.sprite.Sprite):
         self.pos_x, self.pos_y = self.rect.center
         # rotate images
         self.image = pygame.transform.rotate(self.image, self.angle)
-        if self.moving:
+        if self.feet_image:
             self.feet_image = pygame.transform.rotate(self.feet_image, self.angle)
-        print(self.angle)
         # reset orig center
         self.rect = self.image.get_rect(center=(self.pos_x, self.pos_y))
         self.hit_box.center = self.rect.center

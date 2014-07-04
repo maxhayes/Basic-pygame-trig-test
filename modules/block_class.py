@@ -17,6 +17,7 @@ class Block(pygame.sprite.Sprite):
         self.image = pygame.Surface([self.width, self.height])
         self.image.fill(self.color)
         self.rect = self.image.get_rect()
+        self.mask = pygame.mask.from_surface(self.image)
         
         
         # position the surface

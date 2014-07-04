@@ -17,7 +17,7 @@ pygame.mixer.init()
 
 # create game objects:
 player = Player(player_image, res_x/2, res_y/2)
-block = Block(RED, 575, 250, 40,750)
+block = Block(RED, 350, 250, 150,250)
 
 # create event/actions & conductor using event_handling
 exes = []

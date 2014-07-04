@@ -13,7 +13,7 @@ import pygame
 from math import cos, acos, degrees, pow, sqrt
 from fractions import Fraction
 from modules.constants import *
-from mxrydevtools import find_rotation
+from mxrydevtools import find_rotation, vector_collide
 
 
 # PLAYER CLASS:
@@ -128,7 +128,6 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center=(self.pos_x, self.pos_y))
         self.hit_box.center = self.rect.center
         # rotate hit box if thresholds are passed
-        print(self.angle)
         bounds = [26,136,205,325]
         if round(self.angle) in range (bounds[0],bounds[1]) or round(self.angle) in range(bounds[2],bounds[3]):
             self.hit_box.height = self.hit_width
@@ -201,7 +200,14 @@ class Player(pygame.sprite.Sprite):
     # movement/keybinding methods:
     def fire(self):
         gunshot_silenced.play()
-        self.player_fired = True    
+        self.player_fired = True  # starts animation
+        # see if 'bullet' hits a block
+        bullet_hits = vector_collide(self.rect.center, self.angle, block_list)
+        if bullet_hits:
+            for block in bullet_hits:
+                block.kill()
+        
+        
     def moveup(self):
         self.changey -= self.speed
     def movedown(self):

@@ -1,5 +1,6 @@
 import pygame
 from modules.constants import *
+from random import randint
 
 
 
@@ -29,3 +30,7 @@ class Block(pygame.sprite.Sprite):
     def move(self):
         pass
     
+    def kill(self):
+        all_sprites_list.remove(self)
+        block_list.remove(self)
+        block = Block(BLUE, randint(0,res_x-10), randint(0,res_y-10), 60,60)

@@ -4,6 +4,7 @@
 # IMPORTS:
 import pygame, math
 from pygame.locals import *
+from random import randint
 from modules.constants import *
 from modules.player_class import *
 from modules.block_class import *
@@ -17,7 +18,9 @@ pygame.mixer.init()
 
 # create game objects:
 player = Player(player_image, res_x/2, res_y/2)
-block = Block(RED, 575, 250, 40,750)
+#block = Block(RED, 575, 250, 40,750)
+for i in range(1):
+    block = Block(BLUE, randint(0,res_x-10), randint(0,res_y-10), 60,60)
 
 # create event/actions & conductor using event_handling
 exes = []

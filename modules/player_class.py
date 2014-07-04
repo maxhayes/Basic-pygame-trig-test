@@ -62,7 +62,6 @@ class Player(pygame.sprite.Sprite):
         self.choose_body_frame()
         self.rotate()
         self.move_collide_rect()
-
 #
 
     
@@ -79,8 +78,7 @@ class Player(pygame.sprite.Sprite):
         if self.laser_state:
             self.draw_laser()
         # draw player body
-        screen.blit(self.image, (self.rect.x, self.rect.y))
-   
+        screen.blit(self.image, (self.rect.x, self.rect.y))   
 #
 
 
@@ -98,7 +96,6 @@ class Player(pygame.sprite.Sprite):
                 self.walk_start_frame = self.frame
                 step = 0
             self.feet_image = walking_frames[step]
-    
 #
 
 
@@ -114,9 +111,7 @@ class Player(pygame.sprite.Sprite):
                 self.player_fired = False
                 self.image = self.orig_image
             else:
-                self.image = recoil_frames[step]
-
-                
+                self.image = recoil_frames[step]                
 #
 
     # rotates images from fram-choosing functions based on player/mouse pos
@@ -176,9 +171,9 @@ class Player(pygame.sprite.Sprite):
             else:
                 break 
         # draw the laser
-        pygame.draw.aaline(screen, (GREEN), [Px, Py], [(Lx), (Ly)], True)
-        
-#        
+        pygame.draw.aaline(screen, (GREEN), [Px, Py], [(Lx), (Ly)], True)        
+# 
+
     # updates player and hitbox position
     def move_collide_rect(self):
         # move up/down and collide check:
@@ -201,8 +196,6 @@ class Player(pygame.sprite.Sprite):
                 elif deltas.index(min(deltas)) == 1: self.rect.x -= min(deltas)
                 elif deltas.index(min(deltas)) == 2: self.rect.y += min(deltas)
                 elif deltas.index(min(deltas)) == 3: self.rect.y -= min(deltas)
-                 
- 
     # 
     
     # movement/keybinding methods:

@@ -32,17 +32,23 @@ class Player(pygame.sprite.Sprite):
         self.orig_image = image
         self.rect = self.image.get_rect()
 <<<<<<< HEAD
+<<<<<<< HEAD
         self.hit_width = 120
         self.hit_height = 110
         self.hit_box = pygame.rect.Rect(0,0, self.hit_width, self.hit_height)
         self.hit_box.center = [start_x, start_y]
         # setup pos/speeds
 =======
+=======
+>>>>>>> parent of 99807a1... dialed in hitbox, added blank bullet class
         # change hitbox size: !!!!!!!!!!!!!!!!
         self.hit_box = pygame.Rect((self.rect.x + 60, self.rect.y + 30),
                                     (self.rect.x + self.rect.width, self.rect.y + self.rect.height))
         
         # setup pos/speed
+<<<<<<< HEAD
+>>>>>>> parent of 99807a1... dialed in hitbox, added blank bullet class
+=======
 >>>>>>> parent of 99807a1... dialed in hitbox, added blank bullet class
         self.rect.x = start_x
         self.rect.y = start_y
@@ -68,6 +74,7 @@ class Player(pygame.sprite.Sprite):
         #all_sprites_list.add(self)
         player_list.add(self)
         
+<<<<<<< HEAD
 <<<<<<< HEAD
      
     # --- define class methods --- #   
@@ -104,11 +111,16 @@ class Player(pygame.sprite.Sprite):
 
     # selects correct frame from feet walking animation
 =======
+=======
+>>>>>>> parent of 99807a1... dialed in hitbox, added blank bullet class
     # --- define class methods --- #
     
 
     # heavy methods
     
+<<<<<<< HEAD
+>>>>>>> parent of 99807a1... dialed in hitbox, added blank bullet class
+=======
 >>>>>>> parent of 99807a1... dialed in hitbox, added blank bullet class
     def choose_feet_frame(self):
         self.feet_image = None
@@ -157,6 +169,15 @@ class Player(pygame.sprite.Sprite):
         # -- calculate angle between player/mouse line and x = 0 --
         # -- using Cos(A) = adj/hyp
         
+<<<<<<< HEAD
+=======
+    
+    def rotate(self):
+        
+        # -- calculate angle between player/mouse line and x = 0 --
+        # -- using Cos(A) = adj/hyp
+        
+>>>>>>> parent of 99807a1... dialed in hitbox, added blank bullet class
         # get mouse coord
         (Mcoord) = pygame.mouse.get_pos()
         Mx, My = Mcoord[0], Mcoord[1]
@@ -196,6 +217,7 @@ class Player(pygame.sprite.Sprite):
         # reset orig center
         self.rect = self.image.get_rect(center=(self.pos_x, self.pos_y))
 <<<<<<< HEAD
+<<<<<<< HEAD
         self.hit_box.center = self.rect.center
         # rotate hit box if thresholds are passed
         print(self.angle)
@@ -208,6 +230,8 @@ class Player(pygame.sprite.Sprite):
             self.hit_box.width = self.hit_width           
 #  
 =======
+=======
+>>>>>>> parent of 99807a1... dialed in hitbox, added blank bullet class
         
         
     
@@ -219,6 +243,7 @@ class Player(pygame.sprite.Sprite):
         Px, Py = self.rect.center
         # create the "laser" endpoint further and further until it 'hits' something
         Lx, Ly, = Mx, My
+<<<<<<< HEAD
 <<<<<<< HEAD
         slope_x = (Mx - Px)
         slope_y = (My - Py)
@@ -241,6 +266,8 @@ class Player(pygame.sprite.Sprite):
             Ly += delta_y*50
             # see if laser has moved off screen
 =======
+=======
+>>>>>>> parent of 99807a1... dialed in hitbox, added blank bullet class
         delta_x = Mx - Px
         delta_y = My - Py
         
@@ -259,12 +286,16 @@ class Player(pygame.sprite.Sprite):
             Lx += delta_x
             Ly += delta_y
             
+<<<<<<< HEAD
+>>>>>>> parent of 99807a1... dialed in hitbox, added blank bullet class
+=======
 >>>>>>> parent of 99807a1... dialed in hitbox, added blank bullet class
             if Lx in range(0,res_x):
                 pass
             elif Ly in range(0, res_y):
                 pass
             else:
+<<<<<<< HEAD
 <<<<<<< HEAD
                 break 
         # draw the laser
@@ -308,6 +339,14 @@ class Player(pygame.sprite.Sprite):
             
         pygame.draw.aaline(screen, (GREEN), [Px, Py], [(Lx), (Ly)], True)
         
+=======
+                break
+            
+
+            
+        pygame.draw.aaline(screen, (GREEN), [Px, Py], [(Lx), (Ly)], True)
+        
+>>>>>>> parent of 99807a1... dialed in hitbox, added blank bullet class
         
         
         
@@ -325,8 +364,11 @@ class Player(pygame.sprite.Sprite):
         self.moving_left = True
     def moveright(self):
 <<<<<<< HEAD
+<<<<<<< HEAD
         self.changex += self.speed
 =======
+=======
+>>>>>>> parent of 99807a1... dialed in hitbox, added blank bullet class
         self.changex += self.speedb
         self.moving_right = True
         
@@ -342,8 +384,11 @@ class Player(pygame.sprite.Sprite):
         self.mobing_left = False
     def stopright(self):
 <<<<<<< HEAD
+<<<<<<< HEAD
         self.changex -= self.speed
 =======
+=======
+>>>>>>> parent of 99807a1... dialed in hitbox, added blank bullet class
         self.changex -= self.speedb
         self.moving_right = False
         

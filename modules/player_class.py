@@ -100,7 +100,7 @@ class Player(pygame.sprite.Sprite):
 
 
     # selects correct body from from body-related animations        
-    def choose_body_frame(self, current_Frame = FRAME):
+    def choose_body_frame(self):
         if not self.player_fired:
             self.recoil_start_frame = self.frame
             self.image = self.orig_image

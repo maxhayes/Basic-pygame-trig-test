@@ -21,7 +21,6 @@ res_x, res_y = display_info.current_w, display_info.current_h
 res_x -= 100
 res_y -= 100
 screen = pygame.display.set_mode([(res_x), (res_y)])
-print("Current Resolution: %sx%s" % (res_x, res_y))
 pygame.mouse.set_visible(False)
 
 
@@ -59,12 +58,12 @@ cursor_size = crosshair.get_size()
 # sprite sheet walking animation:
 p_walking_ani = pygame.image.load("images/ani_feet_walking_sheet.png").convert()
 p_walking_ani.set_colorkey(WHITE)
-walking_frames = mxrydevtools.animation_list(p_walking_ani, 8)
+walking_animation = mxrydevtools.Animation(p_walking_ani, 8, WALKING_SPEED)
 
 # sprite sheet recoil animation:
-p_walking_ani = pygame.image.load("images/ani_body_recoil.png").convert()
-p_walking_ani.set_colorkey(WHITE)
-recoil_frames = mxrydevtools.animation_list(p_walking_ani, 7)  
+p_recoil_ani = pygame.image.load("images/ani_body_recoil.png").convert()
+p_recoil_ani.set_colorkey(WHITE)
+recoil_animation = mxrydevtools.Animation(p_recoil_ani, 7, RECOIL_SPEED) 
 
     
 # :::::::::::::::::: SOUNDS ::::::::::::::::::::::::::

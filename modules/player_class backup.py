@@ -57,18 +57,9 @@ class Player(pygame.sprite.Sprite):
     # increase fram counte each time its called, chooses framse from animations,
     # rotates them, moves them, and checks for collisions
     def move(self):      
-        if self.changex == 0 and self.changey == 0:
-            self.moving = False
-        else:
-            self.moving = True 
-        self.feet_image = walking_animation.frame_update(self.moving)
-        
-        self.image = recoil_animation.frame_update(self.player_fired, loop = False)
-        if not self.image:
-            self.image = self.orig_image
-            self.player_fired = False
-        
-        
+        self.frame += 1
+        self.choose_feet_frame()
+        self.choose_body_frame()
         self.rotate()
         self.move_collide_rect()
 #
@@ -89,6 +80,40 @@ class Player(pygame.sprite.Sprite):
         # draw player body
         screen.blit(self.image, (self.rect.x, self.rect.y))   
 #
+
+
+    # selects correct frame from feet walking animation
+    def choose_feet_frame(self):
+        self.feet_image = None
+        if self.changex == 0 and self.changey == 0:
+            self.walk_start_frame = self.frame
+        else:
+            # player moving, animate
+            self.moving = True
+            # select frame
+            step = (self.frame - self.walk_start_frame)//self.walk_speed
+            if step >= len(walking_frames):
+                self.walk_start_frame = self.frame
+                step = 0
+            self.feet_image = walking_frames[step]
+#
+
+
+    # selects correct body from from body-related animations        
+    def choose_body_frame(self):
+        if not self.player_fired:
+            self.recoil_start_frame = self.frame
+            self.image = self.orig_image
+        if self.player_fired:
+            # player firing (remember this does not loop)
+            step = (self.frame - self.recoil_start_frame)//self.recoil_speed
+            if step >= len(recoil_frames):
+                self.player_fired = False
+                self.image = self.orig_image
+            else:
+                self.image = recoil_frames[step]                
+#
+
     # rotates images from fram-choosing functions based on player/mouse pos
     def rotate(self):
         # find angle with MxRyDevtool
@@ -103,7 +128,6 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center=(self.pos_x, self.pos_y))
         self.hit_box.center = self.rect.center
         # rotate hit box if thresholds are passed
-        
         bounds = [26,136,205,325]
         if round(self.angle) in range (bounds[0],bounds[1]) or round(self.angle) in range(bounds[2],bounds[3]):
             self.hit_box.height = self.hit_width

@@ -10,10 +10,6 @@ from modules.player_class import *
 from modules.block_class import *
 from mxrydevtools import *
 
-# sounds
-import pygame.mixer
-pygame.mixer.pre_init(44100, -16, 1, 512)
-pygame.mixer.init()
 
 
 # create game objects:

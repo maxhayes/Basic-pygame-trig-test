@@ -215,15 +215,15 @@ class Animation():
         
         else:
             size = [sheet_size.width/columns, sheet_size.height/rows]
-            print(sheet_size.width)
-            print(sheet_size.height)
-            print('')
+            #print(sheet_size.width)
+            #print(sheet_size.height)
+            #print('')
             current_row = 0
             current_column = 0
             
             for i in range(self.num_frames):
                 pos = [size[0]*current_column , size[1]*current_row]
-                print("%s: %s" % (i+1, pos))
+                #print("%s: %s" % (i+1, pos))
                 frame_list.append(image.subsurface(pos, size))
                 current_column += 1
                 if current_column == columns:

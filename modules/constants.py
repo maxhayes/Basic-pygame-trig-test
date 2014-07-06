@@ -1,6 +1,11 @@
 import pygame
 import mxrydevtools
 
+# sounds
+import pygame.mixer
+pygame.mixer.init(frequency=22050, size=16, channels=4, buffer=256)
+#pygame.mixer.init()
+
 # colors
 BLACK = (0,0,0)
 WHITE = (255,255,255)
@@ -73,9 +78,12 @@ reload_animation = mxrydevtools.Animation(p_reload_ani, 12, RELOAD_DURATION,
                                           columns=3, rows=4)
     
 # :::::::::::::::::: SOUNDS ::::::::::::::::::::::::::
-gunshot_silenced = pygame.mixer.Sound('sound_fx\silenced_gunshot.wav')
-laser_on = pygame.mixer.Sound('sound_fx\laser_toggle_on.wav')
-laser_off = pygame.mixer.Sound('sound_fx\laser_toggle_off.wav')
+gunshot_silenced = pygame.mixer.Sound('sound_fx/silenced_gunshot.aiff')
+reload_sound =     pygame.mixer.Sound('sound_fx/reload.aiff')
+laser_on =         pygame.mixer.Sound('sound_fx/laser_toggle_on.aiff')
+laser_off =        pygame.mixer.Sound('sound_fx/laser_toggle_off.aiff')
+empty_clip =       pygame.mixer.Sound('sound_fx/empty_clip.aiff')
+
 
 
 

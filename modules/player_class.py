@@ -19,9 +19,10 @@ from mxrydevtools import find_rotation, vector_collide
 # PLAYER CLASS:
 class Player(pygame.sprite.Sprite):
     
-    def __init__(self, image, start_x = 0, start_y = 0):
+    def __init__(self, image, start_x = 0, start_y = 0,
+                 clip_size = 11,
+                 ammo_count = 150):
         
-        self.frame = 0
         # inherited class init
         pygame.sprite.Sprite.__init__(self)        
         # setup image
@@ -32,7 +33,12 @@ class Player(pygame.sprite.Sprite):
         self.hit_height = 110
         self.hit_box = pygame.rect.Rect(0,0, self.hit_width, self.hit_height)
         self.hit_box.center = [start_x, start_y]
-        # setup pos/speeds
+        # setup pos/speeds/variables
+        
+        self.clip_size = clip_size
+        self.ammo_count = ammo_count
+        self.current_clip = self.clip_size
+        
         self.rect.x = start_x
         self.rect.y = start_y   
         self.speed = PLAYER_SPEED
@@ -41,12 +47,12 @@ class Player(pygame.sprite.Sprite):
         self.moving = False
         self.player_fired = False
         self.player_reloading = False
+        self.started_reload = False
         self.laser_state = False
         self.pre_reload_laser = False
         
     
         # add object to lists
-        #all_sprites_list.add(self)
         player_list.add(self)
         
      
@@ -65,10 +71,21 @@ class Player(pygame.sprite.Sprite):
         if not self.recoil_image:
             self.player_fired = False        
         self.reload_image = reload_animation.frame_update(self.player_reloading, loop = False)
+        
         if not self.reload_image:
             self.player_reloading = False
             self.laser_state = self.pre_reload_laser
-        else: self.laser_state = False
+            if self.started_reload:
+                if self.ammo_count > self.clip_size:
+                    self.current_clip = self.clip_size
+                    self.ammo_count -= self.clip_size
+                else: 
+                    self.current_clip = self.ammo_count
+                    self.ammo_count = 0
+                self.started_reload = False
+        else: 
+            self.laser_state = False
+            self.started_reload = True
             
         # decide which body image to use:
         if self.recoil_image: self.image = self.recoil_image
@@ -86,7 +103,8 @@ class Player(pygame.sprite.Sprite):
         # make hitbox visible for collision debug.
         self.hit_box_vis = pygame.Surface([self.hit_box.width, self.hit_box.height])
         self.hit_box_vis.fill([0,125,125,5])
-        # uncomment next line to draw hitbox:        
+        
+        
         self.move()
         if self.feet_image:
             screen.blit(self.feet_image, (self.rect.x, self.rect.y))
@@ -94,7 +112,13 @@ class Player(pygame.sprite.Sprite):
             self.draw_laser()
         # draw player body
         screen.blit(self.image, (self.rect.x, self.rect.y))   
+        # draw score:
+        self.ammo_readout = font.render("Ammo: %s/%s" % (self.current_clip, self.ammo_count), 0, GREEN)
+        self.hud_rect = self.ammo_readout.get_rect()
+        screen.blit(self.ammo_readout, (res_x - self.hud_rect.width,
+                                        res_y - self.hud_rect.height))
 #
+
     # rotates images from fram-choosing functions based on player/mouse pos
     def rotate(self):
         # find angle with MxRyDevtool
@@ -181,15 +205,19 @@ class Player(pygame.sprite.Sprite):
     
     # movement/keybinding methods:
     def fire(self):
-        if not self.player_reloading:
-            gunshot_silenced.play()
-            self.player_fired = True  # starts animation
-            # see if 'bullet' hits a block
-            bullet_hits = vector_collide(self.rect.center, self.angle, block_list)
-            if bullet_hits:
-                for block in bullet_hits:
-                    block.kill()
-            
+        if self.current_clip:
+            if not self.player_reloading:
+                gunshot_silenced.play()
+                self.player_fired = True  # starts animation
+                # see if 'bullet' hits a block
+                bullet_hits = vector_collide(self.rect.center, self.angle, block_list)
+                if bullet_hits:
+                    for block in bullet_hits:
+                        block.kill()
+                self.current_clip -= 1
+        else:
+            empty_clip.play()
+
             
     def moveup(self):
         self.changey -= self.speed
@@ -227,6 +255,12 @@ class Player(pygame.sprite.Sprite):
                 self.pre_reload_laser = self.laser_state
         
     def reload(self):
-        self.player_reloading = True
-        #self.pre_reload_laser = self.laser_state
-        self.laser_state = False
+        if self.ammo_count != 0:
+            if not self.player_reloading:
+                reload_sound.play()
+                self.player_reloading = True
+                self.laser_state = False
+                
+        else:
+            empty_clip.play()
+    

@@ -32,8 +32,9 @@ background.fill((50,50,50))
 # game experience constants
 
 PLAYER_SPEED = 4
-WALKING_SPEED = 9
-RECOIL_SPEED = 1
+WALKING_DURATION = 9
+RECOIL_DURATION = 1
+RELOAD_DURATION = 5
 
 
 
@@ -58,13 +59,18 @@ cursor_size = crosshair.get_size()
 # sprite sheet walking animation:
 p_walking_ani = pygame.image.load("images/ani_feet_walking_sheet.png").convert()
 p_walking_ani.set_colorkey(WHITE)
-walking_animation = mxrydevtools.Animation(p_walking_ani, 8, WALKING_SPEED)
+walking_animation = mxrydevtools.Animation(p_walking_ani, 8, WALKING_DURATION)
 
 # sprite sheet recoil animation:
 p_recoil_ani = pygame.image.load("images/ani_body_recoil.png").convert()
 p_recoil_ani.set_colorkey(WHITE)
-recoil_animation = mxrydevtools.Animation(p_recoil_ani, 7, RECOIL_SPEED) 
+recoil_animation = mxrydevtools.Animation(p_recoil_ani, 7, RECOIL_DURATION) 
 
+# sprite sheet reload animation
+p_reload_ani = pygame.image.load("images/ani_reload_sheet.png").convert()
+p_reload_ani.set_colorkey(WHITE)
+reload_animation = mxrydevtools.Animation(p_reload_ani, 12, RELOAD_DURATION,
+                                          columns=3, rows=4)
     
 # :::::::::::::::::: SOUNDS ::::::::::::::::::::::::::
 gunshot_silenced = pygame.mixer.Sound('sound_fx\silenced_gunshot.wav')

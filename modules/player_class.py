@@ -19,9 +19,7 @@ from mxrydevtools import find_rotation, vector_collide
 # PLAYER CLASS:
 class Player(pygame.sprite.Sprite):
     
-    def __init__(self, image, start_x = 0, start_y = 0, 
-                 walking_speed = WALKING_SPEED,
-                 recoil_speed = RECOIL_SPEED):
+    def __init__(self, image, start_x = 0, start_y = 0):
         
         self.frame = 0
         # inherited class init
@@ -37,14 +35,14 @@ class Player(pygame.sprite.Sprite):
         # setup pos/speeds
         self.rect.x = start_x
         self.rect.y = start_y   
-        self.walk_speed = walking_speed
-        self.recoil_speed = recoil_speed
         self.speed = PLAYER_SPEED
         self.changex, self.changey = 0,0
         
         self.moving = False
         self.player_fired = False
+        self.player_reloading = False
         self.laser_state = False
+        self.pre_reload_laser = False
         
     
         # add object to lists
@@ -57,18 +55,27 @@ class Player(pygame.sprite.Sprite):
     # increase fram counte each time its called, chooses framse from animations,
     # rotates them, moves them, and checks for collisions
     def move(self):      
+        # see if player is moving
         if self.changex == 0 and self.changey == 0:
             self.moving = False
         else:
             self.moving = True 
         self.feet_image = walking_animation.frame_update(self.moving)
-        
-        self.image = recoil_animation.frame_update(self.player_fired, loop = False)
-        if not self.image:
+        self.recoil_image = recoil_animation.frame_update(self.player_fired, loop = False)
+        if not self.recoil_image:
+            self.player_fired = False        
+        self.reload_image = reload_animation.frame_update(self.player_reloading, loop = False)
+        if not self.reload_image:
+            self.player_reloading = False
+            self.laser_state = self.pre_reload_laser
+        else: self.laser_state = False
+            
+        # decide which body image to use:
+        if self.recoil_image: self.image = self.recoil_image
+        if self.reload_image: self.image = self.reload_image
+        if not self.recoil_image and not self.reload_image:
             self.image = self.orig_image
-            self.player_fired = False
-        
-        
+            
         self.rotate()
         self.move_collide_rect()
 #
@@ -79,8 +86,7 @@ class Player(pygame.sprite.Sprite):
         # make hitbox visible for collision debug.
         self.hit_box_vis = pygame.Surface([self.hit_box.width, self.hit_box.height])
         self.hit_box_vis.fill([0,125,125,5])
-        # uncomment next line to draw hitbox:
-        #screen.blit(self.hit_box_vis, (self.hit_box.topleft))        
+        # uncomment next line to draw hitbox:        
         self.move()
         if self.feet_image:
             screen.blit(self.feet_image, (self.rect.x, self.rect.y))
@@ -175,15 +181,16 @@ class Player(pygame.sprite.Sprite):
     
     # movement/keybinding methods:
     def fire(self):
-        gunshot_silenced.play()
-        self.player_fired = True  # starts animation
-        # see if 'bullet' hits a block
-        bullet_hits = vector_collide(self.rect.center, self.angle, block_list)
-        if bullet_hits:
-            for block in bullet_hits:
-                block.kill()
-        
-        
+        if not self.player_reloading:
+            gunshot_silenced.play()
+            self.player_fired = True  # starts animation
+            # see if 'bullet' hits a block
+            bullet_hits = vector_collide(self.rect.center, self.angle, block_list)
+            if bullet_hits:
+                for block in bullet_hits:
+                    block.kill()
+            
+            
     def moveup(self):
         self.changey -= self.speed
     def movedown(self):
@@ -200,14 +207,26 @@ class Player(pygame.sprite.Sprite):
         self.changex +=self.speed
     def stopright(self):
         self.changex -= self.speed
+        
     def laser_on(self):
-        self.laser_state = True
-        laser_on.play()
+        if not self.player_reloading:
+            self.laser_state = True
+            self.pre_reload_laser = self.laser_state
+            laser_on.play()
     def laser_off(self):
-        self.laser_state = False
-        laser_off.play()
+        if not self.player_reloading:
+            self.laser_state = False
+            self.pre_reload_laser = self.laser_state
+            laser_off.play()
     def laser_toggle(self):
-        if self.laser_state:
-            self.laser_off()
-        else:
-            self.laser_on()
+        if not self.player_reloading:
+            if self.laser_state:
+                self.laser_off()
+            else:
+                self.laser_on()
+                self.pre_reload_laser = self.laser_state
+        
+    def reload(self):
+        self.player_reloading = True
+        #self.pre_reload_laser = self.laser_state
+        self.laser_state = False

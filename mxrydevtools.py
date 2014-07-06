@@ -193,7 +193,7 @@ class Event_conductor():
 
 class Animation():
     
-    def __init__(self, image, num_frames, duration, rows = '', colums = ''):
+    def __init__(self, image, num_frames, duration, rows = None, columns = None):
         
         # init variables
         self.frame = 0
@@ -206,7 +206,7 @@ class Animation():
         sheet_size = self.image.get_rect()
         
         # create frames_list
-        if rows == '' and colums == '':
+        if not rows and not columns: # assume one vertical line of sprites
             for i in range(self.num_frames):
                 size = [sheet_size.width, sheet_size.height/self.num_frames]
                 pos = [0, (size[1] * (i))]
@@ -214,13 +214,23 @@ class Animation():
             self.frame_list = frame_list
         
         else:
-            size = [sheet_size.width/colums, sheet_size.height/rows]
-            current_row = 1
-            for i in range(frames):
-                pos = [size[0]*i *current_row, size[1]*i]
-                frame_list.apped(image.subsurface(pos, size))
-                if i == (colums-1): current_row += 1
+            size = [sheet_size.width/columns, sheet_size.height/rows]
+            print(sheet_size.width)
+            print(sheet_size.height)
+            print('')
+            current_row = 0
+            current_column = 0
+            
+            for i in range(self.num_frames):
+                pos = [size[0]*current_column , size[1]*current_row]
+                print("%s: %s" % (i+1, pos))
+                frame_list.append(image.subsurface(pos, size))
+                current_column += 1
+                if current_column == columns:
+                    current_column = 0
+                    current_row +=1
             self.frame_list = frame_list
+            
     def frame_update(self, run, loop = True,):
         self.loop = loop
         

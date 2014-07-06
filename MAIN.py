@@ -31,6 +31,7 @@ p1_right = Event_exe(K_d, player.moveright, player.stopright, exes)
 p1_fire = Event_exe('LMB', player.fire, ignore, exes)
 p1_laseron = Event_exe('RMB', player.laser_on, player.laser_off, exes)
 p1_lasertog = Event_exe(K_t, player.laser_toggle, ignore, exes)
+p1_reload = Event_exe(K_r, player.reload, ignore, exes)
 
 conductor = Event_conductor(exes)
 

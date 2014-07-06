@@ -3,8 +3,8 @@ import mxrydevtools
 
 # sounds
 import pygame.mixer
-pygame.mixer.init(frequency=22050, size=16, channels=4, buffer=256)
-#pygame.mixer.init()
+pygame.mixer.init(frequency=22000, size=16, channels=2, buffer=256)
+
 
 # colors
 BLACK = (0,0,0)

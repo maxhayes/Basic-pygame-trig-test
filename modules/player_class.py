@@ -13,7 +13,7 @@ import pygame
 from math import cos, acos, degrees, pow, sqrt
 from fractions import Fraction
 from modules.constants import *
-from mxrydevtools import find_rotation, vector_collide
+from mxrydevtools import find_rotation, vector_collide, collidefix
 
 
 # PLAYER CLASS:
@@ -66,10 +66,12 @@ class Player(pygame.sprite.Sprite):
             self.moving = False
         else:
             self.moving = True 
+            
         self.feet_image = walking_animation.frame_update(self.moving)
         self.recoil_image = recoil_animation.frame_update(self.player_fired, loop = False)
         if not self.recoil_image:
             self.player_fired = False        
+        
         self.reload_image = reload_animation.frame_update(self.player_reloading, loop = False)
         
         if not self.reload_image:
@@ -185,22 +187,7 @@ class Player(pygame.sprite.Sprite):
         self.rect.x += self.changex
         self.rect.y += self.changey
         self.hit_box.center = self.rect.center
-        
-        for block in block_list:
-            if self.hit_box.colliderect(block.rect):
-                # make the smallest change possible to get player out of the wall
-                delta_left = block.rect.right - self.hit_box.left
-                delta_right = self.hit_box.right - block.rect.left
-                delta_top = block.rect.bottom - self.hit_box.top
-                delta_bottom = self.hit_box.bottom - block.rect.top
-                
-                # add all deltas to a list:
-                deltas = [delta_left, delta_right, delta_top, delta_bottom]
-                
-                if   deltas.index(min(deltas)) == 0: self.rect.x += min(deltas)
-                elif deltas.index(min(deltas)) == 1: self.rect.x -= min(deltas)
-                elif deltas.index(min(deltas)) == 2: self.rect.y += min(deltas)
-                elif deltas.index(min(deltas)) == 3: self.rect.y -= min(deltas)
+        collidefix(self.hit_box, block_list, self)
     # 
     
     # movement/keybinding methods:
@@ -210,10 +197,8 @@ class Player(pygame.sprite.Sprite):
                 gunshot_silenced.play()
                 self.player_fired = True  # starts animation
                 # see if 'bullet' hits a block
-                bullet_hits = vector_collide(self.rect.center, self.angle, block_list)
-                if bullet_hits:
-                    for block in bullet_hits:
-                        block.kill()
+                
+                bullet_hits = vector_collide(self.rect.center, self.angle, block_list, kill=True)
                 self.current_clip -= 1
         else:
             empty_clip.play()

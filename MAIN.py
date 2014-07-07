@@ -15,7 +15,7 @@ from mxrydevtools import *
 # create game objects:
 player = Player(player_image, res_x/2, res_y/2)
 for i in range(20):
-    block = Block(WHITE, randint(0,res_x-10), randint(0,res_y-10), 60,60)
+    block = Block(WHITE, randint(0,res_x-10), randint(0,res_y-10), 25,25)
 
 # create event/actions & conductor using event_handling
 exes = []

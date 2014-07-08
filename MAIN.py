@@ -14,8 +14,13 @@ from mxrydevtools import *
 
 # create game objects:
 player = Player(player_image, res_x/2, res_y/2)
-for i in range(20):
+for i in range(11):
     block = Block(WHITE, randint(0,res_x-10), randint(0,res_y-10), 25,25)
+    
+# create whole game functions:
+
+
+
 
 # create event/actions & conductor using event_handling
 exes = []
@@ -28,6 +33,7 @@ p1_fire = Event_exe('LMB', player.fire, ignore, exes)
 p1_laseron = Event_exe('RMB', player.laser_on, player.laser_off, exes)
 p1_lasertog = Event_exe(K_t, player.laser_toggle, ignore, exes)
 p1_reload = Event_exe(K_r, player.reload, ignore, exes)
+#time_shift = Event_exe(K_LSHIFT, slow_mo, normal_mo, exes)
 
 conductor = Event_conductor(exes)
 

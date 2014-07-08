@@ -41,6 +41,21 @@ WALKING_DURATION = 9
 RECOIL_DURATION = 1
 RELOAD_DURATION = 5
 
+        
+def slow_mo():
+    PLAYER_SPEED *= .5
+    WALKING_DURATION *= .5
+    RECOIL_DURATION *= .5
+    RELOAD_DURATION *= .5
+    
+def normal_mo():
+    PLAYER_SPEED *= 2
+    WALKING_DURATION *= 2
+    RECOIL_DURATION *= 2
+    RELOAD_DURATION *= 2
+
+
+
 
 
 # lists

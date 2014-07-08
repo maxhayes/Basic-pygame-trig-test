@@ -51,13 +51,14 @@ def find_rotation(data1, data2, data3 = '', data4 = ''):
     if y1 > y2:
         angle = (180 - raw_angle) + 180
     else:
-        angle = raw_angle    
+        angle = raw_angle   
+    #print(raw_angle)
     return(angle)
 
 
 
 #::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::#
-#::::::::::::: VECTOR/ANBLE COLLISION TEST  :::::::::::::::::::#
+#::::::::::::: VECTOR/ANGLE COLLISION TEST  :::::::::::::::::::#
 '''
 Function is given a projectile orgin point and game angle, as
 well as a list of pygame.rect objects to check collision for.
@@ -85,16 +86,22 @@ def vector_collide(orgin_pos, orgin_angle, object_list, kill = False):
                    object.rect.bottomright]
         for point in corners:
             object_angles.append(round(find_rotation(orgin_pos, point)))
-        #print('bullet:%s, max:%s, min:%s' % (orgin_angle, min(object_angles), max(object_angles)))
+        print('\nbullet:%s, max:%s, min:%s\n::::::::::::::::::::::' 
+              % (orgin_angle, min(object_angles), max(object_angles)))
         
-        if orgin_angle in range(min(object_angles), max(object_angles)):
-            hit_objects.append(object)
-        elif min(object_angles) < 90 and max(object_angles) > 270:
-            if not orgin_angle in range(min(object_angles), max(object_angles)):
+        if min(object_angles) in range(0, 90) and max(object_angles) in range(270, 360):
+            if orgin_angle in range(0, min(object_angles)) or orgin_angle in range (max(object_angles), 360):
                 hit_objects.append(object)
+            elif orgin_angle == min(object_angles) or orgin_angle == max(object_angles): hit_objects.append(object)
+                
+        else:
+            if orgin_angle in range(min(object_angles), max(object_angles)): hit_objects.append(object)
+            elif orgin_angle == min(object_angles) or orgin_angle == max(object_angles): hit_objects.append(object)
+                
     object_distances = []
     x1,y1 = orgin_pos[0], orgin_pos[1]
-    #print(hit_objects)
+    
+    # If more than one object was hit, only return the closest one
     for hit_object in hit_objects:
         x2,y2 = hit_object.rect.center
         object_distances.append( sqrt(    pow((x2-x1),2) + pow((y2-y1),2)    )     )

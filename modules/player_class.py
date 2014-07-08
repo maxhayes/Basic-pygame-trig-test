@@ -58,7 +58,7 @@ class Player(pygame.sprite.Sprite):
      
     # --- define class methods --- #   
     
-    # increase fram counte each time its called, chooses framse from animations,
+    # increase frame count each time it's called, chooses framse from animations,
     # rotates them, moves them, and checks for collisions
     def move(self):      
         # see if player is moving
@@ -187,6 +187,9 @@ class Player(pygame.sprite.Sprite):
         self.rect.x += self.changex
         self.rect.y += self.changey
         self.hit_box.center = self.rect.center
+        
+        for block in block_list:
+            if self.hit_box.colliderect(block.rect): self.feet_image = False
         collidefix(self.hit_box, block_list, self)
     # 
     
@@ -248,4 +251,3 @@ class Player(pygame.sprite.Sprite):
                 
         else:
             empty_clip.play()
-    
